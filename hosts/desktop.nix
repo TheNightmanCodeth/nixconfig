@@ -36,9 +36,14 @@ in {
   networking.networkmanager.enable = true;
 
   fonts = {
-    packages = with pkgs; [
+    packages = [
       berkeley-mono
     ];
+    fontconfig = {
+      defaultFonts = {
+        monospace = [ "BerkeleyMono Nerd Font Mono" ];
+      };
+    };
     # localConf = builtins.writeFile "fonts.xml" /* xml */ ''
     #   <?xml version="1.0"?>
     #   <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
