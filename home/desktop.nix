@@ -46,6 +46,7 @@ in {
         extraPackages = with pkgs; [
           lua-language-server
           nil
+          rust-analyzer
 
           xclip
           wl-clipboard
