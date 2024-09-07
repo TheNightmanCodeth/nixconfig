@@ -1,4 +1,4 @@
-{ inputs, pkgs, ... }:
+{ pkgs, ... }:
 let
   accent = "flamingo";
   flavor = "macchiato";
@@ -27,86 +27,91 @@ in {
         inherit flavor;
       };
     };
-
-    neovim =
-    let
-      toLua = str: "lua << EOF\n${str}\nEOF\n";
-      toLuaFile = file: "lua << EOF\n${builtins.readFile file}\nEOF\n";
-    in {
-      enable = true;
-      defaultEditor = true;
-      viAlias = true;
-      vimAlias = true;
-      vimdiffAlias = true;
-      catppuccin = {
+    
+    neovim =  
+      let  
+        toLua = str: "lua << EOF\n${str}\nEOF\n";
+        toLuaFile = file: "lua << EOF\n${builtins.readFile file}\nEOF\n";
+      in {
         enable = true;
-        inherit flavor;
+        defaultEditor = true;
+        viAlias = true;
+        vimAlias = true;
+        vimdiffAlias = true;
+        catppuccin = {
+          enable = true;
+          inherit flavor;
+        };
+
+        extraPackages = with pkgs; [
+          lua-language-server
+          nil
+
+          xclip
+          wl-clipboard
+        ];
+
+        plugins = with pkgs.vimPlugins; [
+          {
+            plugin = nvim-lspconfig;
+            config = toLuaFile ./neovim/plugins/lsp.lua;
+          }
+
+          neodev-nvim
+
+          {
+            plugin = neo-tree-nvim;
+            config = toLua "require(\"neo-tree\").setup()";
+          }
+
+          nvim-cmp
+          {
+            plugin = nvim-cmp;
+            config = toLuaFile ./neovim/plugins/cmp.lua;
+          }
+
+          {
+            plugin = telescope-nvim;
+            config = toLuaFile ./neovim/plugins/telescope.lua;
+          }
+
+          telescope-fzf-native-nvim
+
+          cmp_luasnip
+          cmp-nvim-lsp
+
+          luasnip
+          friendly-snippets
+
+          lualine-nvim
+          nvim-web-devicons
+
+          {
+            plugin = (nvim-treesitter.withPlugins (p: [
+              p.tree-sitter-nix
+              p.tree-sitter-vim
+              p.tree-sitter-bash
+              p.tree-sitter-lua
+              p.tree-sitter-zig
+              p.tree-sitter-yaml
+              p.tree-sitter-rust
+              p.tree-sitter-python
+              p.tree-sitter-markdown
+              p.tree-sitter-just
+              p.tree-sitter-json
+              p.tree-sitter-gleam
+              p.tree-sitter-elixir
+            ]));
+            config = toLuaFile ./neovim/plugins/treesitter.lua;
+          }
+
+          vim-nix
+        ];
+
+        extraLuaConfig = ''
+          ${builtins.readFile ./neovim/options.lua}
+        '';
       };
-
-      extraPackages = with pkgs; [
-        lua-language-server
-        nil
-
-        xclip
-        wl-clipboard
-      ];
-
-      plugins = with pkgs.vimPlugins; [
-        {
-          plugin = nvim-lspconfig;
-          config = toLuaFile ./neovim/plugins/lsp.lua;
-        }
-
-        neodev-nvim
-
-        nvim-cmp
-        {
-          plugin = nvim-cmp;
-          config = toLuaFile ./neovim/plugins/cmp.lua;
-        }
-
-        {
-          plugin = telescope-nvim;
-          config = toLuaFile ./neovim/plugins/telescope.lua;
-        }
-
-        telescope-fzf-native-nvim
-
-        cmp_luasnip
-        cmp-nvim-lsp
-
-        luasnip
-        friendly-snippets
-
-        lualine-nvim
-        nvim-web-devicons
-
-        {
-          plugin = (nvim-treesitter.withPlugins (p: [
-            p.tree-sitter-nix
-            p.tree-sitter-vim
-            p.tree-sitter-bash
-            p.tree-sitter-lua
-            p.tree-sitter-zig
-            p.tree-sitter-yaml
-            p.tree-sitter-rust
-            p.tree-sitter-python
-            p.tree-sitter-markdown
-            p.tree-sitter-just
-            p.tree-sitter-json
-            p.tree-sitter-gleam
-            p.tree-sitter-elixir
-          ]));
-          config = toLuaFile ./neovim/plugins/treesitter.lua;
-        }
-
-        vim-nix
-      ];
-
-      extraLuaConfig = ''
-        ${builtins.readFile ./neovim/options.lua}
-      '';
-    };
 
     zsh = {
       enable = true;
@@ -114,7 +119,7 @@ in {
         enable = true;
         plugins = [
           { name = "zsh-users/zsh-autosuggestions"; }
-          { name = "romkatv/powerlevel10k"; tags = [ as:theme depth:1 ]; }
+          { name = "romkatv/powerlevel10k"; tags = [ "as:theme" "depth:1" ]; }
         ];
       };
       initExtra = ''
