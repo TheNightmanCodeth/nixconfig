@@ -53,6 +53,14 @@ in {
         ];
 
         plugins = with pkgs.vimPlugins; [
+          nvim-web-devicons
+          plenary-nvim
+          nui-nvim
+          {
+            plugin = catppuccin-nvim;
+            config = toLua "require(\"catppuccin\").setup()";
+          }
+
           {
             plugin = nvim-lspconfig;
             config = toLuaFile ./neovim/plugins/lsp.lua;
@@ -62,7 +70,7 @@ in {
 
           {
             plugin = neo-tree-nvim;
-            config = toLua "require(\"neo-tree\").setup()";
+            config = toLuaFile ./neovim/plugins/neotree.lua;
           }
 
           nvim-cmp
@@ -85,7 +93,6 @@ in {
           friendly-snippets
 
           lualine-nvim
-          nvim-web-devicons
 
           {
             plugin = (nvim-treesitter.withPlugins (p: [
