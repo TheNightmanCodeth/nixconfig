@@ -8,7 +8,7 @@
     catppuccin.url = "github:catppuccin/nix";
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
     nixos-cosmic = {
-       url = "github:TheNightmanCodeth/nixos-cosmic"; # "github:lilyinstarlight/nixos-cosmic";
+       url = "github:lilyinstarlight/nixos-cosmic"; # "github:lilyinstarlight/nixos-cosmic";
        inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
@@ -37,7 +37,7 @@
         # Thinkpad X13s
         thinkpad-X13s = nixpkgs.lib.nixosSystem {
           inherit system;
-	      specialArgs = { inherit inputs pkgs; };
+	      specialArgs = { inherit inputs; };
 	      modules = [
 			x13s-nixos.nixosModules.default
 			catppuccin.nixosModules.catppuccin

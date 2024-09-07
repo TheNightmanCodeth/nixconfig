@@ -1,7 +1,7 @@
 { inputs, ... }:
-let
-  pkgs = inputs.nixpkgs.legacyPackages."aarch64-linux";
-in {
+{
+  nixpkgs.config.allowUnfree = true;
+
   nixos-x13s.enable = true;
   nixos-x13s.kernel = "jhovold";
   nixos-x13s.bluetoothMac = "F4:A8:0D:2A:84:EA";
