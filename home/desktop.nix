@@ -13,6 +13,13 @@ in {
       nix-direnv.enable = true;
     };
 
+    eza = {
+      enable = true;
+      icons = true;
+      git = true;
+      enableZshIntegration = true;
+    };
+
     kitty = {
       enable = true;
       settings = {
@@ -21,6 +28,7 @@ in {
         bold_italic_font = "BerkeleyMono Nerd Font Bold Italic";
         italic_font = "BerkeleyMono Nerd Font Italic";
         wayland_titlebar_color = "background";
+        window_padding_width = 10;
       };
       catppuccin = {
         enable = true;
