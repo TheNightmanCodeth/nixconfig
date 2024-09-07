@@ -43,17 +43,6 @@ lspconfig.lua_ls.setup {
     }
 }
 
-lspconfig.sourcekit.setup {
-    on_attach = on_attach,
-    capabilities = capabilities.setup {
-        workspace = {
-            didChangeWatchedFiles = {
-                dynamicRegistration = true,
-			},
-        },
-	},
-}
-
 lspconfig.nil_ls.setup {
     on_attach = on_attach,
     capabilities = capabilities,

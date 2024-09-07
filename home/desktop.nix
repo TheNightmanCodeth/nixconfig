@@ -45,7 +45,6 @@ in {
 
       extraPackages = with pkgs; [
         lua-language-server
-        sourcekit-lsp
         nil
 
         xclip
