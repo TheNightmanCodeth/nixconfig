@@ -2,6 +2,14 @@
 {
   nixpkgs.config.allowUnfree = true;
 
+  # There's updated wifi firmware in main branch.
+  # Remove this once it's in nixpkgs
+  nixpkgs.overlays = [
+    (final: prev: {
+      linux-firmware = inputs.linux-firmware-main.nixosModules.default;
+    })    
+  ];
+
   nixos-x13s.enable = true;
   nixos-x13s.kernel = "jhovold";
   nixos-x13s.bluetoothMac = "F4:A8:0D:2A:84:EA";

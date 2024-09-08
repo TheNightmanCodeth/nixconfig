@@ -22,6 +22,7 @@ in {
     drm_info
     firefox
     devenv
+    python3
   ];
 
   ## FLATPAK + FLATHUB

@@ -3,12 +3,12 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    # nixpkgs-small.url = "github:nixos/nixpkgs?ref=nixos-unstable-small";
+    linux-firmware-main.url = "github:TheNightmanCodeth/linux-firmware-git-flake/main";
     x13s-nixos.url = "github:TheNightmanCodeth/x13s-nixos/jhovold-rc6";
     catppuccin.url = "github:catppuccin/nix";
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
     nixos-cosmic = {
-       url = "github:lilyinstarlight/nixos-cosmic"; # "github:lilyinstarlight/nixos-cosmic";
+       url = "github:lilyinstarlight/nixos-cosmic";
        inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
@@ -23,14 +23,11 @@
 		     catppuccin,
 		     hyprland,
 			 nixos-cosmic,
-		     home-manager,
+             home-manager,
+             linux-firmware-main,
 		     ... }@inputs:
     let
       system = "aarch64-linux";
-      pkgs = import nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-      };
     in {
       hardware.enableRedistributableFirmware = true;
       nixosConfigurations = {
