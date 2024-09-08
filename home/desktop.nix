@@ -157,6 +157,17 @@ in {
     };
   };
 
+  dconf = {
+    enable = true;
+    settings."org/gnome/shell" = {
+      disable-user-extensions = false;
+      ## GNOME EXTENSIONS ##
+      enabled-extensions = with pkgs.gnomeExtensions; [
+        dash-to-dock.extensionUuid
+      ];
+    };
+  };
+
   home = {
     packages = with pkgs; [
       zed-editor
