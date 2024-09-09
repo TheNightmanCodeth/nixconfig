@@ -470,6 +470,7 @@
         "linux-firmware-main": "linux-firmware-main",
         "nixos-cosmic": "nixos-cosmic",
         "nixpkgs": "nixpkgs_3",
+        "swift-59-nixpkgs": "swift-59-nixpkgs",
         "x13s-nixos": "x13s-nixos"
       }
     },
@@ -491,6 +492,22 @@
       "original": {
         "owner": "oxalica",
         "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "swift-59-nixpkgs": {
+      "locked": {
+        "lastModified": 1708855400,
+        "narHash": "sha256-QlDt0hDHZ+ofZTmfu4+zIIxMJIRwnuWJITatkZU19Qo=",
+        "owner": "stephank",
+        "repo": "nixpkgs",
+        "rev": "e18cfdb0ef4e8736df4ec3189b05a94b08b11a38",
+        "type": "github"
+      },
+      "original": {
+        "owner": "stephank",
+        "ref": "feat/swift-5.9",
+        "repo": "nixpkgs",
         "type": "github"
       }
     },
