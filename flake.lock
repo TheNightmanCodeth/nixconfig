@@ -554,11 +554,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1726098630,
-        "narHash": "sha256-QmDGu/p1QKsDT7kGGAykE8tZ1Sz1x3awPnYHpZQ26Yo=",
+        "lastModified": 1726098904,
+        "narHash": "sha256-p3pd70ViDP0Gz8p1SLTARR+YqjhwjnndP3QNMVn6Zto=",
         "owner": "TheNightmanCodeth",
         "repo": "x13s-nixos",
-        "rev": "0c0eb15f191dc19caa4af5d5179bedd8c0452b31",
+        "rev": "fbab0a130c52b90b5ebf47bd12d944acd9ae816c",
         "type": "github"
       },
       "original": {

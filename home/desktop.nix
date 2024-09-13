@@ -159,12 +159,17 @@ in {
 
   dconf = {
     enable = true;
-    settings."org/gnome/shell" = {
-      disable-user-extensions = false;
-      ## GNOME EXTENSIONS ##
-      enabled-extensions = with pkgs.gnomeExtensions; [
-        dash-to-dock.extensionUuid
-      ];
+    settings = {
+      "org/gnome/shell" = {
+        disable-user-extensions = false;
+        ## GNOME EXTENSIONS ##
+        enabled-extensions = with pkgs.gnomeExtensions; [
+          dash-to-dock.extensionUuid
+        ];
+      };
+      "org/gnome/epiphany" = {
+        "web/enable-webextensions" = true;
+      };
     };
   };
 

@@ -23,8 +23,8 @@ in {
     firefox
     devenv
     python3
-    swift
-    swiftPackages.swiftpm
+    #swift
+    #swiftPackages.swiftpm
   ];
 
   ## FLATPAK + FLATHUB

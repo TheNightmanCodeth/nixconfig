@@ -1,13 +1,13 @@
-{ lib, requireFile, stdenvNoCC, unzip }:
+{ lib, fetchurl, stdenvNoCC, unzip }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "berkeley-mono";
   version = "1.000";
 
-  src = requireFile rec {
-    name = "berkeley-mono-combined.zip";
+  src = fetchurl {
+    url = "https://github.com/TheNightmanCodeth/nixconfig/raw/refs/heads/main/fonts/berkeley-mono-combined.zip";
     sha256 = "1sdbfwibv9wsm9k9l220srilcmay5jm5ljpz33i3j9hjrcc8wjnr";
-    message = "poopy";
+    #message = "poopy";
   };
 
   outputs = [ "out" ];
