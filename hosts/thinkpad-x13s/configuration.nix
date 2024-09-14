@@ -7,8 +7,8 @@
   nixpkgs.overlays = [
     (final: prev: {
       linux-firmware = inputs.linux-firmware-main.nixosModules.default;
-      swift = inputs.swift-59-nixpkgs.legacyPackages."aarch64-linux".swift;
-      swiftPackages.swiftpm = inputs.swift-59-nixpkgs.legacyPackages.aarch64-linux.swiftPackages.swiftpm;
+      #swift = inputs.swift-59-nixpkgs.legacyPackages."aarch64-linux".swift;
+      #swiftPackages.swiftpm = inputs.swift-59-nixpkgs.legacyPackages.aarch64-linux.swiftPackages.swiftpm;
     })    
   ];
 

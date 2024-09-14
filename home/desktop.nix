@@ -13,12 +13,12 @@ in {
       nix-direnv.enable = true;
     };
 
-    eza = {
-      enable = true;
-      icons = true;
-      git = true;
-      enableZshIntegration = true;
-    };
+    #eza = {
+      #enable = true;
+      #icons = true;
+      #git = true;
+      #enableZshIntegration = true;
+    #};
 
     kitty = {
       enable = true;
@@ -129,19 +129,37 @@ in {
         '';
       };
 
-    zsh = {
-      enable = true;
-      zplug = {
+      nushell = {
         enable = true;
-        plugins = [
-          { name = "zsh-users/zsh-autosuggestions"; }
-          { name = "romkatv/powerlevel10k"; tags = [ "as:theme" "depth:1" ]; }
-        ];
+        envFile.source = ./nushell/env.nu;
+        configFile.source = ./nushell/config.nu;
+        
       };
-      initExtra = ''
-        test -f ~/.p10k.zsh && source ~/.p10k.zsh
-      '';
-    };
+  
+      carapace = {
+        enable = true;
+        enableNushellIntegration = true;
+      };
+
+      oh-my-posh = {
+        enable = true;
+        enableNushellIntegration = true;
+        settings = builtins.fromJSON (builtins.unsafeDiscardStringContext (builtins.readFile ./nushell/themes/joe_rules.omp.json));
+      };
+
+      #zsh = {
+      #  enable = true;
+      #  zplug = {
+      #    enable = true;
+      #    plugins = [
+      #      { name = "zsh-users/zsh-autosuggestions"; }
+      #      { name = "romkatv/powerlevel10k"; tags = [ "as:theme" "depth:1" ]; }
+      #    ];
+      #  };
+      #  initExtra = ''
+      #    test -f ~/.p10k.zsh && source ~/.p10k.zsh
+      #  '';
+      #};
   };
 
   gtk = {

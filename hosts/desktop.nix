@@ -11,7 +11,7 @@ in {
     isNormalUser = true;
     description = "Joe Diragi";
     extraGroups = [ "networkmanager" "wheel" ];
-    shell = "${pkgs.zsh}/bin/zsh";
+    shell = "${pkgs.nushell}/bin/nu";
     home = "/home/joe";
     homeMode = "755";
   };
