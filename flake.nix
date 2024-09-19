@@ -2,7 +2,7 @@
   description = "Joe rules";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixpkgs-unstable";# "nixos-unstable";
     swift-59-nixpkgs.url = "github:stephank/nixpkgs?ref=feat/swift-5.9";
     linux-firmware-main.url = "github:TheNightmanCodeth/linux-firmware-git-flake/main";
     x13s-nixos.url = "github:TheNightmanCodeth/x13s-nixos/jhovold-rc7";
@@ -16,6 +16,12 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # nixpkgs-unstable.url = "github:nixos/nixpkgs?ref=nixpkgs-unstable";
+    ghostty = {
+      url = "git+ssh://git@github.com/ghostty-org/ghostty";
+      inputs.nixpkgs-stable.follows = "nixpkgs";
+      inputs.nixpkgs-unstable.follows = "nixpkgs";
+    };
   };
 
   outputs = { self,
@@ -25,6 +31,7 @@
 		     hyprland,
 			 nixos-cosmic,
              home-manager,
+             ghostty,
              linux-firmware-main,
 		     ... }@inputs:
     let

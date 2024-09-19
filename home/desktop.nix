@@ -3,8 +3,8 @@ let
   accent = "flamingo";
   flavor = "macchiato";
 in {
-  catppuccin.flavor = flavor;
-  catppuccin.enable = true;
+  #catppuccin.flavor = flavor;
+  #catppuccin.enable = true;
 
   programs = {
     direnv = {
@@ -162,18 +162,18 @@ in {
       #};
   };
 
-  gtk = {
-    enable = true;
-    catppuccin = {
-      enable = true;
-      inherit accent flavor;
-      gnomeShellTheme = true;
-      icon = {
-        enable = true;
-        inherit accent flavor;
-      };
-    };
-  };
+    #gtk = {
+    #enable = true;
+    #catppuccin = {
+    #  enable = true;
+    #  inherit accent flavor;
+    #  gnomeShellTheme = true;
+    #  icon = {
+    #    enable = true;
+    #    inherit accent flavor;
+    #  };
+    #};
+  #};
 
   dconf = {
     enable = true;
@@ -194,8 +194,6 @@ in {
   home = {
     packages = with pkgs; [
       zed-editor
-      hyprland
-      waybar
     ];
 
     username = "joe";

@@ -23,6 +23,8 @@ in {
     firefox
     devenv
     python3
+    zig
+    inputs.ghostty.packages."aarch64-linux".default
     #swift
     #swiftPackages.swiftpm
   ];
@@ -44,6 +46,10 @@ in {
   services.desktopManager.cosmic.enable = true;
   hardware.pulseaudio.enable = false;
   networking.networkmanager.enable = true;
+
+  services.udev.packages = [ pkgs.yubikey-personalization ];
+  services.yubikey-agent.enable = true;
+  services.pcscd.enable = true;
 
   fonts = {
     packages = [
