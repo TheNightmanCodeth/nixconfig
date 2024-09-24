@@ -3,8 +3,6 @@ let
   accent = "flamingo";
   flavor = "macchiato";
 in {
-  #catppuccin.flavor = flavor;
-  #catppuccin.enable = true;
 
   programs = {
     direnv = {
@@ -13,29 +11,13 @@ in {
       nix-direnv.enable = true;
     };
 
-    #eza = {
-      #enable = true;
-      #icons = true;
-      #git = true;
-      #enableZshIntegration = true;
-    #};
-
-    kitty = {
+    eza = {
       enable = true;
-      settings = {
-        font_family = "BerkeleyMono Nerd Font Mono";
-        bold_font = "BerkeleyMono Nerd Font Mono Bold";
-        bold_italic_font = "BerkeleyMono Nerd Font Bold Italic";
-        italic_font = "BerkeleyMono Nerd Font Italic";
-        wayland_titlebar_color = "background";
-        window_padding_width = 10;
-      };
-      catppuccin = {
-        enable = true;
-        inherit flavor;
-      };
+      icons = true;
+      git = true;
+      enableZshIntegration = true;
     };
-    
+
     neovim =  
       let  
         toLua = str: "lua << EOF\n${str}\nEOF\n";
@@ -67,6 +49,11 @@ in {
           {
             plugin = catppuccin-nvim;
             config = toLua "require(\"catppuccin\").setup()";
+          }
+
+          {
+            plugin = gitsigns-nvim;
+            config = toLua "require(\"gitsigns\").setup()";
           }
 
           {
@@ -129,51 +116,38 @@ in {
         '';
       };
 
-      nushell = {
-        enable = true;
-        envFile.source = ./nushell/env.nu;
-        configFile.source = ./nushell/config.nu;
-        
-      };
-  
       carapace = {
         enable = true;
         enableNushellIntegration = true;
       };
 
-      oh-my-posh = {
+      zsh = {
         enable = true;
-        enableNushellIntegration = true;
-        settings = builtins.fromJSON (builtins.unsafeDiscardStringContext (builtins.readFile ./nushell/themes/joe_rules.omp.json));
+        zplug = {
+          enable = true;
+          plugins = [
+            { name = "zsh-users/zsh-autosuggestions"; }
+            { name = "romkatv/powerlevel10k"; tags = [ "as:theme" "depth:1" ]; }
+          ];
+        };
+        initExtra = ''
+          test -f ~/.p10k.zsh && source ~/.p10k.zsh
+        '';
       };
-
-      #zsh = {
-      #  enable = true;
-      #  zplug = {
-      #    enable = true;
-      #    plugins = [
-      #      { name = "zsh-users/zsh-autosuggestions"; }
-      #      { name = "romkatv/powerlevel10k"; tags = [ "as:theme" "depth:1" ]; }
-      #    ];
-      #  };
-      #  initExtra = ''
-      #    test -f ~/.p10k.zsh && source ~/.p10k.zsh
-      #  '';
-      #};
   };
 
     #gtk = {
-    #enable = true;
-    #catppuccin = {
     #  enable = true;
-    #  inherit accent flavor;
-    #  gnomeShellTheme = true;
-    #  icon = {
+    #  catppuccin = {
     #    enable = true;
     #    inherit accent flavor;
+    #    gnomeShellTheme = true;
+    #      #icon = {
+    #      #  enable = true;
+    #      #  inherit accent flavor;
+    #      #};
     #  };
     #};
-  #};
 
   dconf = {
     enable = true;
@@ -183,6 +157,7 @@ in {
         ## GNOME EXTENSIONS ##
         enabled-extensions = with pkgs.gnomeExtensions; [
           dash-to-dock.extensionUuid
+          blur-my-shell.extensionUuid
         ];
       };
       "org/gnome/epiphany" = {
@@ -194,6 +169,8 @@ in {
   home = {
     packages = with pkgs; [
       zed-editor
+      gnomeExtensions.dash-to-dock
+      gnomeExtensions.blur-my-shell
     ];
 
     username = "joe";
