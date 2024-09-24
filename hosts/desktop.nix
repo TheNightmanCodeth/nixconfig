@@ -26,6 +26,7 @@ in {
     distrobox
     boxbuddy
     devenv
+    kdeconnect
     xsettingsd # here for assets in flatpaks
     cntr # Used to connect to failed nix-build via breakpointHook in nativeBuildInputs
     ### SWIFT ###
@@ -119,7 +120,15 @@ in {
     themePackages = [ pkgs.nixos-bgrt-plymouth ];
   };
 
-  programs.adb.enable = true;
+  networking.firewall = {
+    enable = true;
+    allowedTCPPortRanges = [
+      { from = 1714; to = 1764; } # KDE Connect
+    ];
+    allowedUDPPortRanges = [
+      { from = 1714; to = 1764; } # KDE Connect
+    ];
+  };
 
   home-manager = {
 

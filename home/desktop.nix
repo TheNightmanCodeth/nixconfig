@@ -166,9 +166,16 @@ in {
     };
   };
 
+    services.kdeconnect = {
+      enable = true;
+      package = pkgs.kdeconnect;
+      indicator = true;
+    };
+
   home = {
     packages = with pkgs; [
       zed-editor
+      gnome-tweaks
       gnomeExtensions.dash-to-dock
       gnomeExtensions.blur-my-shell
     ];
