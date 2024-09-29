@@ -29,21 +29,29 @@ in {
     kdeconnect
     xsettingsd # here for assets in flatpaks
     cntr # Used to connect to failed nix-build via breakpointHook in nativeBuildInputs
-    ### SWIFT ###
+
+    ####  SWIFT BUILD-DEPS  ####
     #libuuid
     #python3
     #cmake
     #ninja
-    #llvmPackages_16.clang
-    #llvmPackages_16.clang.bintools
+    #llvmPackages_17.clang
+    #llvmPackages_17.clang.bintools
+    #sqlite
+    #sqlite.dev
     #glibc
     #sccache
-    #############
+    swift
+    swiftpm
+    swiftpm2nix
+    ############################
 
-    #zig
+    zig
     inputs.ghostty.packages."aarch64-linux".default
-    #swift
-    #swiftPackages.swiftpm
+
+    swift
+    swiftPackages.swiftpm
+    sourcekit-lsp
   ];
 
   ## DOCKER
@@ -131,7 +139,6 @@ in {
   };
 
   home-manager = {
-
     users.joe = {
       imports = [
         ../home/desktop.nix

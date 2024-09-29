@@ -3,20 +3,27 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    swift-59-nixpkgs.url = "github:stephank/nixpkgs?ref=feat/swift-5.9";
+    swift-59-nixpkgs.url = "github:TheNightmanCodeth/nixpkgs?ref=feat/swift-5.9";
     linux-firmware-main.url = "github:TheNightmanCodeth/linux-firmware-git-flake/main";
-    x13s-nixos.url = "github:TheNightmanCodeth/x13s-nixos/jhovold-rc7";
+    x13s-nixos.url = "github:TheNightmanCodeth/x13s-nixos/jhovold-6.11";
     catppuccin.url = "github:catppuccin/nix";
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+
+    vpn-confinement = {
+      url = "github:Maroka-chan/VPN-Confinement";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nixos-cosmic = {
        url = "github:lilyinstarlight/nixos-cosmic";
        inputs.nixpkgs.follows = "nixpkgs";
     };
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # nixpkgs-unstable.url = "github:nixos/nixpkgs?ref=nixpkgs-unstable";
+
     ghostty = {
       url = "git+ssh://git@github.com/ghostty-org/ghostty";
       inputs.nixpkgs-stable.follows = "nixpkgs";
@@ -33,11 +40,15 @@
              home-manager,
              ghostty,
              linux-firmware-main,
+             vpn-confinement,
 		     ... }@inputs:
     let
       system = "aarch64-linux";
     in {
       hardware.enableRedistributableFirmware = true;
+
+      inputs.nixpkgs.config.allowUnfree = true;
+
       nixosConfigurations = {
         # Thinkpad X13s
         thinkpad-X13s = nixpkgs.lib.nixosSystem {
@@ -47,7 +58,8 @@
 			x13s-nixos.nixosModules.default
 			catppuccin.nixosModules.catppuccin
 			home-manager.nixosModules.home-manager
-			nixos-cosmic.nixosModules.default
+            nixos-cosmic.nixosModules.default
+            vpn-confinement.nixosModules.default
 	        ./hosts/thinkpad-x13s/configuration.nix
 		    ./hosts/desktop.nix
 	      ];
