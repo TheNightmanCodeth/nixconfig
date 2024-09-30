@@ -1,6 +1,6 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 {
-  imports = [ ../desktop.nix ];
+  imports = [ ../desktop.nix ./arrs ];
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
@@ -16,7 +16,7 @@
 
     initrd = {
       availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "usb_storage" ];
-      kernelModules = [ ];
+      kernelModules = [ "amdgpu" ];
     };
 
     kernelModules = [ "kvm-amd" ];
@@ -51,36 +51,28 @@
     { device = "/dev/disk/by-label/swap"; }
   ];
 
-#### VPN + Transmission
-  vpnNamespaces.wg = {
-    enable = true;
-    wireguardConfigFile = /. + "/home/joe/.secrets/wireguard.conf";
-    accessibleFrom = [
-      "0.0.0.0"
-      "192.168.1.0/24"
-    ];
-    portMappings = [
-      { from = 9091; to = 9091; }
-    ];
-    openVPNPorts = [{
-      port = 60965;
-      protocol = "both";
-    }];
-  };
+#### GPU
+  services.xserver.videoDrivers = [ "amdgpu" ];
 
-  systemd.services.transmission.vpnConfinement = {
-    enable = true;
-    vpnNamespace = "wg";
-  };
+  ## HIP
+  systemd.tmpfiles.rules = [
+    "L+    /opt/rocm/hip   -    -    -     -    ${pkgs.rocmPackages.clr}"
+  ];
 
-  services.transmission = {
-    enable = true;
-    settings = {
-      "rpc-bind-address" = "192.168.15.1";
-      "rpc-whitelist-enabled" = true;
-      "rpc-whitelist" = "127.0.0.1,192.168.1.*";
-    };
+  ## OpenGL / OpenCL / Vulkan
+  hardware.graphics = {
+    extraPackages = with pkgs; [
+      rocmPackages.clr.icd
+      amdvlk
+    ];
+
+    extraPackages32 = with pkgs; [
+      driversi686Linux.amdvlk
+    ];
+
+    enable32Bit = true;
   };
+  hardware.enableAllFirmware = true;
 
 #### *ARR
   

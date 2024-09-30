@@ -61,9 +61,20 @@
             nixos-cosmic.nixosModules.default
             vpn-confinement.nixosModules.default
 	        ./hosts/thinkpad-x13s/configuration.nix
-            # ./hosts/desktop.nix
 	      ];
-	    };
+        };
+
+        homelab = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; system = "x86_64-linux"; };
+          modules = [
+            catppuccin.nixosModules.catppuccin
+            home-manager.nixosModules.home-manager
+            nixos-cosmic.nixosModules.default
+            vpn-confinement.nixosModules.default
+            ./hosts/homelab/configuration.nix 
+          ];
+        };
 
 	    installer-iso = nixpkgs.lib.nixosSystem {
 		  system = "aarch64-linux";

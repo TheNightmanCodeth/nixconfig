@@ -4,7 +4,7 @@ let
 
 in {
 
-#### MISC (sorry)
+#### NIX
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';
@@ -129,6 +129,10 @@ in {
       enable = true;
       allowedTCPPorts = [ 
         22 # SSH
+        8989 # Sonarr
+      ];
+      allowedUDPPorts = [
+        8989 # Sonarr
       ];
       allowedTCPPortRanges = [
         { from = 1714; to = 1764; } # KDE Connect
@@ -138,6 +142,9 @@ in {
       ];
     };
   };
+
+#### TIME 
+  services.ntp.enable = true;
 
 #### SSH
   services.openssh = {
