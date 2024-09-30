@@ -1,14 +1,27 @@
-{ inputs, config, lib, ... }:
+{ config, lib, ... }:
 {
+  imports = [ ../desktop.nix ];
+
   nixpkgs.config.allowUnfree = true;
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   networking.hostName = "homelab";
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "usb_storage" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" ];
-  boot.extraModulePackages = [ ];
+#### BOOT
+  boot = {
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+
+    initrd = {
+      availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "usb_storage" ];
+      kernelModules = [ ];
+    };
+
+    kernelModules = [ "kvm-amd" ];
+    extraModulePackages = [ ];
+  };
 
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 

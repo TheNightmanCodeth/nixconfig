@@ -1,12 +1,15 @@
-{ inputs, pkgs, ... }:
+{ inputs, pkgs, system, ... }:
 let
   berkeley-mono = pkgs.callPackage ../fonts/berkeley-mono.nix { };
 
 in {
+
+#### MISC (sorry)
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';
 
+#### USERS
   users.users.joe = {
     isNormalUser = true;
     description = "Joe Diragi";
@@ -16,6 +19,7 @@ in {
     homeMode = "755";
   };
 
+#### System Packages
   environment.systemPackages = with pkgs; [
     wget
     git
@@ -29,35 +33,14 @@ in {
     kdeconnect
     xsettingsd # here for assets in flatpaks
     cntr # Used to connect to failed nix-build via breakpointHook in nativeBuildInputs
-
-    ####  SWIFT BUILD-DEPS  ####
-    #libuuid
-    #python3
-    #cmake
-    #ninja
-    #llvmPackages_17.clang
-    #llvmPackages_17.clang.bintools
-    #sqlite
-    #sqlite.dev
-    #glibc
-    #sccache
-    swift
-    swiftpm
-    swiftpm2nix
-    ############################
-
     zig
-    inputs.ghostty.packages."aarch64-linux".default
-
-    swift
-    swiftPackages.swiftpm
-    sourcekit-lsp
+    inputs.ghostty.packages.${system}.default
   ];
 
-  ## DOCKER
+#### DOCKER
   virtualisation.docker.enable = true;
 
-  ## FLATPAK + FLATHUB
+#### FLATPAK + FLATHUB
   services.flatpak.enable = true;
   systemd.services.flatpak-repo = {
     wantedBy = [ "multi-user.target" ];
@@ -66,6 +49,8 @@ in {
       flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
       
       ## !!! Flatpak fonts !!!
+      ## NOTE: I don't think this is doing anything atp
+
       ## Source: https://nixos.wiki/wiki/Fonts#Flatpak_applications_can.27t_find_system_fonts
       # ln -s /run/current-system/sw/share/X11/fonts ~/.local/share/fonts 
       flatpak --user override --filesystem=$HOME/.local/share/fonts:ro
@@ -74,23 +59,28 @@ in {
     '';
   };
 
-  ## DESKTOP
+#### DESKTOP
   services.xserver = {
     enable = true;
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = true;
   };
   services.desktopManager.cosmic.enable = true;
-  hardware.pulseaudio.enable = false;
-  networking.networkmanager.enable = true;
 
+#### AUDIO
+  hardware.pulseaudio.enable = false;
+
+#### UDEV
   services.udev.packages = with pkgs; [ 
     yubikey-personalization
     android-udev-rules
   ];
+
+#### YUBIKEY (+udev)
   services.yubikey-agent.enable = true;
   services.pcscd.enable = true;
 
+#### FONTS
   fonts = {
     packages = [
       berkeley-mono
@@ -105,7 +95,7 @@ in {
     fontDir.enable = true;
   };
 
-  ## Binary Caches
+#### Binary Caches
   nix.settings = {
     substituters = [
       "https://cosmic.cachix.org/"
@@ -122,22 +112,47 @@ in {
     ];
   };
 
+#### BOOT THEME
   boot.plymouth = {
     enable = true;
     theme = "nixos-bgrt";
     themePackages = [ pkgs.nixos-bgrt-plymouth ];
   };
 
-  networking.firewall = {
-    enable = true;
-    allowedTCPPortRanges = [
-      { from = 1714; to = 1764; } # KDE Connect
-    ];
-    allowedUDPPortRanges = [
-      { from = 1714; to = 1764; } # KDE Connect
-    ];
+#### NETWORKING
+  networking = {
+    networkmanager = {
+      enable = true;
+    };
+  #### FIREWALL
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 
+        22 # SSH
+      ];
+      allowedTCPPortRanges = [
+        { from = 1714; to = 1764; } # KDE Connect
+      ];
+      allowedUDPPortRanges = [
+        { from = 1714; to = 1764; } # KDE Connect
+      ];
+    };
   };
 
+#### SSH
+  services.openssh = {
+    enable = true;
+    ports = [ 22 ];
+    settings = {
+      PasswordAuthentication = true;
+      AllowUsers = null; # Allow all users. Can be [ "joe" "urmomma" ]
+      UseDns = true;
+      X11Forwarding = false; # idk what this does but wayland better ?
+      PermitRootLogin = "prohibit-password"; # sudo who
+    };
+  };
+
+#### HOME-MANAGER
   home-manager = {
     users.joe = {
       imports = [

@@ -45,7 +45,7 @@
     let
       system = "aarch64-linux";
     in {
-      hardware.enableRedistributableFirmware = true;
+      config.hardware.enableRedistributableFirmware = true;
 
       inputs.nixpkgs.config.allowUnfree = true;
 
@@ -53,7 +53,7 @@
         # Thinkpad X13s
         thinkpad-X13s = nixpkgs.lib.nixosSystem {
           inherit system;
-	      specialArgs = { inherit inputs; };
+	      specialArgs = { inherit inputs system; };
 	      modules = [
 			x13s-nixos.nixosModules.default
 			catppuccin.nixosModules.catppuccin
@@ -61,7 +61,7 @@
             nixos-cosmic.nixosModules.default
             vpn-confinement.nixosModules.default
 	        ./hosts/thinkpad-x13s/configuration.nix
-		    ./hosts/desktop.nix
+            # ./hosts/desktop.nix
 	      ];
 	    };
 

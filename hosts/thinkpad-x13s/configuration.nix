@@ -1,5 +1,7 @@
-{ inputs, lib, ... }:
+{ inputs, ... }:
 {
+  imports = [ ../desktop.nix ];
+
   #nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
   #  "libfprint-2-tod1-goodix"
   #];
