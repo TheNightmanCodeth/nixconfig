@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 {
-  imports = [ ../desktop.nix ./arrs ];
+  imports = [ ../desktop.nix ./arrs ./apps ];
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
@@ -72,10 +72,6 @@
 
     enable32Bit = true;
   };
-  hardware.enableAllFirmware = true;
-
-#### *ARR
-  
-
+  hardware.enableAllFirmware = true; 
   system.stateVersion = "24.11";
 }

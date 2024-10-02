@@ -129,10 +129,10 @@ in {
       enable = true;
       allowedTCPPorts = [ 
         22 # SSH
-        8989 # Sonarr
+        23231 # Soft Serve
       ];
       allowedUDPPorts = [
-        8989 # Sonarr
+        
       ];
       allowedTCPPortRanges = [
         { from = 1714; to = 1764; } # KDE Connect
