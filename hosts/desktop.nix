@@ -26,7 +26,8 @@ in {
     drm_info
     libdrm
     firefox
-    ungoogled-chromium
+    chromium
+    apostrophe
     distrobox
     boxbuddy
     devenv
