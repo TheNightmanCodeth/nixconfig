@@ -51,6 +51,33 @@
     { device = "/dev/disk/by-label/swap"; }
   ];
 
+#### NFS Shares
+  fileSystems."/export/Documents" = {
+    device = "/mnt/data/Shared/Documents";
+    options = [ "bind" ];
+  };
+
+  fileSystems."/export/Projects" = {
+    device = "/mnt/data/Shared/Projects";
+    options = [ "bind" ];
+  };
+
+  services.nfs.server = {
+    enable = true;
+
+    # Fixed rpc.statdPort for firewall
+    lockdPort = 4001;
+    mountdPort = 4002;
+    statdPort = 4000;
+    extraNfsdConfig = '''';
+
+    exports = ''
+      /export             thinkpad-X13s(rw,fsid=0,no_subtree_check)
+      /export/Documents   thinkpad-X13s(rw,nohide,insecure,no_subtree_check)
+      /export/Projects    thinkpad-X13s(rw,nohide,insecure,no_subtree_check)
+    '';
+  };
+
 #### GPU
   services.xserver.videoDrivers = [ "amdgpu" ];
 

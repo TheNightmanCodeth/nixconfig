@@ -130,9 +130,10 @@ in {
       allowedTCPPorts = [ 
         22 # SSH
         23231 # Soft Serve
+        111 2049 4000 4001 4002 20048 # NFS
       ];
       allowedUDPPorts = [
-        
+        111 2049 4000 4001 4002 20048 # NFS
       ];
       allowedTCPPortRanges = [
         { from = 1714; to = 1764; } # KDE Connect
