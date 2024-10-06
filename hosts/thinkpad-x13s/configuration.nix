@@ -48,5 +48,16 @@
     { device = "/dev/disk/by-label/swap"; }
   ];
 
+#### NFS
+  boot.initrd = {
+    supportedFilesystems = [ "nfs" ];
+    kernelModules = [ "nfs" ];
+  };
+
+  fileSystems."/mnt/Projects" = {
+    device = "homelab:/Projects";
+    fsType = "nfs";
+  };
+
   system.stateVersion = "24.11";
 }
