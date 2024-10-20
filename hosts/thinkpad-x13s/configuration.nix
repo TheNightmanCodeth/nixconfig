@@ -37,27 +37,15 @@ in
       fsType = "ext4";
     };
 
+    fileSystems."/home" = {
+      device = "/dev/disk/by-label/home";
+      fsType = "ext4";
+    };
+
     fileSystems."/boot" = {
       device = "/dev/disk/by-label/boot";
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
-    };
-
-    swapDevices = [
-      { device = "/dev/disk/by-label/swap"; }
-    ];
-
-#### NFS
-    services.rpcbind.enable = true;
-    boot.initrd = {
-      supportedFilesystems = [ "nfs" "rpc_pipefs" ];
-      kernelModules = [ "nfs" "rpc_pipefs" ];
-    };
-
-    fileSystems."/mnt/Projects" = {
-      device = "joe@homelab:/mnt/data";
-      fsType = "sshfs";
-      options = [ "nodev" "noatime" "allow_other" "IdentityFile=/home/joe/.ssh/id_ed25519" ];
     };
 
     system.stateVersion = "24.11";
