@@ -52,15 +52,6 @@ in {
       path = [ pkgs.flatpak ];
       script = ''
         flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-        
-        ## !!! Flatpak fonts !!!
-        ## NOTE: I don't think this is doing anything atp
-
-        ## Source: https://nixos.wiki/wiki/Fonts#Flatpak_applications_can.27t_find_system_fonts
-        # ln -s /run/current-system/sw/share/X11/fonts ~/.local/share/fonts 
-        flatpak --user override --filesystem=$HOME/.local/share/fonts:ro
-        flatpak --user override --filesystem=$HOME/.icons:ro
-        flatpak --user override --filesystem=/nix/store:ro
       '';
     };
 
@@ -70,7 +61,6 @@ in {
       displayManager.gdm.enable = true;
       desktopManager.gnome.enable = true;
     };
-    services.desktopManager.cosmic.enable = true;
 
 #### AUDIO
     hardware.pulseaudio.enable = false;
