@@ -34,7 +34,7 @@ in {
       distrobox
       boxbuddy
       devenv
-      kdeconnect
+      plasma5Packages.kdeconnect-kde
       nfs-utils
       xsettingsd # here for assets in flatpaks
       cntr # Used to connect to failed nix-build via breakpointHook in nativeBuildInputs

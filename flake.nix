@@ -3,8 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
-    linux-firmware-main.url = "github:TheNightmanCodeth/linux-firmware-git-flake/main";
-    x13s-nixos.url = "github:TheNightmanCodeth/x13s-nixos/jhovold-6.12-rc2";
+    x13s-nixos.url = "github:TheNightmanCodeth/x13s-nixos/jhovold-6.12-rc4";
     catppuccin.url = "github:catppuccin/nix";
 
     vpn-confinement = {
@@ -36,7 +35,6 @@
 			 nixos-cosmic,
              home-manager,
              ghostty,
-             linux-firmware-main,
              vpn-confinement,
 		     ... }@inputs:
     let

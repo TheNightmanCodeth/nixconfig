@@ -168,7 +168,7 @@ in {
 
     services.kdeconnect = {
       enable = true;
-      package = pkgs.kdeconnect;
+      package = pkgs.plasma5Packages.kdeconnect-kde;
       indicator = true;
     };
 
