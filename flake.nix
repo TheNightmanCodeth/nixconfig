@@ -6,10 +6,7 @@
     x13s-nixos.url = "github:TheNightmanCodeth/x13s-nixos/jhovold-6.12-rc4";
     catppuccin.url = "github:catppuccin/nix";
 
-    vpn-confinement = {
-      url = "github:Maroka-chan/VPN-Confinement";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    vpn-confinement.url = "github:Maroka-chan/VPN-Confinement";
 
     nixos-cosmic = {
        url = "github:lilyinstarlight/nixos-cosmic";

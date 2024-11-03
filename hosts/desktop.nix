@@ -16,7 +16,7 @@ in {
     users.users.joe = {
       isNormalUser = true;
       description = "Joe Diragi";
-      extraGroups = [ "networkmanager" "wheel" "docker" "adbusers" "plugdev" ];
+      extraGroups = [ "networkmanager" "wheel" "docker" ];
       shell = "${pkgs.zsh}/bin/zsh";
       home = "/home/joe";
       homeMode = "755";
@@ -30,15 +30,13 @@ in {
       libdrm
       firefox
       chromium
-      apostrophe
+      #apostrophe
       distrobox
       boxbuddy
       devenv
-      plasma5Packages.kdeconnect-kde
       nfs-utils
       xsettingsd # here for assets in flatpaks
       cntr # Used to connect to failed nix-build via breakpointHook in nativeBuildInputs
-      zig
       inputs.ghostty.packages.${system}.default
     ];
 
@@ -108,11 +106,11 @@ in {
     };
 
 #### BOOT THEME
-    boot.plymouth = {
-      enable = true;
-      theme = "nixos-bgrt";
-      themePackages = [ pkgs.nixos-bgrt-plymouth ];
-    };
+    # boot.plymouth = {
+    #   enable = true;
+    #   theme = "nixos-bgrt";
+    #   themePackages = [ pkgs.nixos-bgrt-plymouth ];
+    # };
 
 #### NETWORKING
     networking = {
