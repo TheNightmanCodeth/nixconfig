@@ -50,8 +50,6 @@
 			x13s-nixos.nixosModules.default
 			catppuccin.nixosModules.catppuccin
 			home-manager.nixosModules.home-manager
-            nixos-cosmic.nixosModules.default
-            vpn-confinement.nixosModules.default
 	        ./hosts/thinkpad-x13s/configuration.nix
 	      ];
         };
@@ -62,7 +60,6 @@
           modules = [
             catppuccin.nixosModules.catppuccin
             home-manager.nixosModules.home-manager
-            nixos-cosmic.nixosModules.default
             vpn-confinement.nixosModules.default
             ./hosts/homelab/configuration.nix 
           ];
