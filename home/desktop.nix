@@ -160,6 +160,9 @@ in {
           blur-my-shell.extensionUuid
         ];
       };
+      "org/gnome/desktop/session" = {
+        idle-delay = 0;
+      };
       "org/gnome/epiphany" = {
         "web/enable-webextensions" = true;
       };
