@@ -2,103 +2,119 @@
 {
   imports = [ ../desktop.nix ./arrs ./apps ];
 
-  nixpkgs.config.allowUnfree = true;
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-
-  networking.hostName = "homelab";
+  config = {
+    nixpkgs.config.allowUnfree = true;
+    nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+    nixpkgs.config.permittedInsecurePackages = [
+      "aspnetcore-runtime-wrapped-6.0.36"
+      "aspnetcore-runtime-6.0.36"
+      "dotnet-sdk-wrapped-6.0.428"
+      "dotnet-sdk-6.0.428"
+    ];
+    networking.hostName = "homelab";
 
 #### BOOT
-  boot = {
-    loader = {
-      systemd-boot.enable = true;
-      efi.canTouchEfiVariables = true;
+    boot = {
+      loader = {
+        systemd-boot.enable = true;
+        efi.canTouchEfiVariables = true;
+      };
+
+      initrd = {
+        availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "usb_storage" ];
+        kernelModules = [ "amdgpu" ];
+      };
+
+      kernelModules = [ "kvm-amd" ];
+      extraModulePackages = [ ];
     };
 
-    initrd = {
-      availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "usb_storage" ];
-      kernelModules = [ "amdgpu" ];
-    };
-
-    kernelModules = [ "kvm-amd" ];
-    extraModulePackages = [ ];
-  };
-
-  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+    hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
 #### FILESYSTEMS
-  fileSystems."/" = {
-    device = "/dev/disk/by-label/nixos";
-    fsType = "ext4";
-  };
+    fileSystems."/" = {
+      device = "/dev/disk/by-label/nixos";
+      fsType = "ext4";
+    };
 
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-label/boot";
-    fsType = "vfat";
-    options = [ "fmask=0077" "dmask=0077" ];
-  };
+    fileSystems."/boot" = {
+      device = "/dev/disk/by-label/boot";
+      fsType = "vfat";
+      options = [ "fmask=0077" "dmask=0077" ];
+    };
 
-  fileSystems."/mnt/media" = {
-    device = "/dev/disk/by-label/MEDIA";
-    fsType = "ext4";
-  };
+    fileSystems."/mnt/media" = {
+      device = "/dev/disk/by-label/MEDIA";
+      fsType = "ext4";
+    };
 
-  fileSystems."/mnt/data" = {
-    device = "/dev/disk/by-label/DATA";
-    fsType = "ext4";
-  };
+    fileSystems."/mnt/data" = {
+      device = "/dev/disk/by-label/DATA";
+      fsType = "ext4";
+    };
 
-  swapDevices = [
-    { device = "/dev/disk/by-label/swap"; }
-  ];
+    swapDevices = [
+      { device = "/dev/disk/by-label/swap"; }
+    ];
 
-#### NFS Shares
-  fileSystems."/export/Documents" = {
-    device = "/mnt/data/Shared/Documents";
-    options = [ "bind" ];
-  };
+#### Time Machine
+    services.samba = {
+      enable = true;
+      securityType = "user";
+      openFirewall = true;
+      settings = {
+        global = {
+          "workgroup" = "homelab";
+          "security" = "user";
+          # Allow everyone on LAN, localhost v4/v6 and tailscale IPs
+          "hosts allow" = "192.168.1. 127.0.0.1 localhost 100.0.0.0/8";
+          # Could set to "never", which would disable grant guest access to failed logins
+          "map to guest" = "bad user";
+        };
+        "time-machine" = {
+          "valid users" = "@users";
+          "path" = "/mnt/data/Backup/time-machine";
+          "fruit:aapl" = "yes";
+          "fruit:time machine" = "yes";
+          "vfs objects" = "catia fruit streams_xattr acl_xattr";
+          "browsable" = "yes";
+          "writeable" = "yes";
+          "read only" = "no";
+          "create mask" = "0644";
+          "directory mask" = "0755";
+        };
+      };
+    };
 
-  fileSystems."/export/Projects" = {
-    device = "/mnt/data/Shared/Projects";
-    options = [ "bind" ];
-  };
+    services.samba-wsdd = {
+      enable = true;
+      openFirewall = true;
+    };
 
-  services.nfs.server = {
-    enable = true;
-
-    # Fixed rpc.statdPort for firewall
-    lockdPort = 4001;
-    mountdPort = 4002;
-    statdPort = 4000;
-    extraNfsdConfig = '''';
-
-    exports = ''
-      /export             thinkpad-X13s(rw,fsid=0,no_subtree_check)
-      /export/Documents   thinkpad-X13s(rw,nohide,insecure,no_subtree_check)
-      /export/Projects    thinkpad-X13s(rw,nohide,insecure,no_subtree_check)
-    '';
-  };
+    networking.firewall.allowPing = true;
 
 #### GPU
-  services.xserver.videoDrivers = [ "amdgpu" ];
+    services.xserver.videoDrivers = [ "amdgpu" ];
 
-  ## HIP
-  systemd.tmpfiles.rules = [
-    "L+    /opt/rocm/hip   -    -    -     -    ${pkgs.rocmPackages.clr}"
-  ];
-
-  ## OpenGL / OpenCL / Vulkan
-  hardware.graphics = {
-    extraPackages = with pkgs; [
-      rocmPackages.clr.icd
-      amdvlk
+    ## HIP
+    systemd.tmpfiles.rules = [
+      "L+    /opt/rocm/hip   -    -    -     -    ${pkgs.rocmPackages.clr}"
     ];
 
-    extraPackages32 = with pkgs; [
-      driversi686Linux.amdvlk
-    ];
+    ## OpenGL / OpenCL / Vulkan
+    hardware.graphics = {
+      extraPackages = with pkgs; [
+        rocmPackages.clr.icd
+        amdvlk
+      ];
 
-    enable32Bit = true;
+      extraPackages32 = with pkgs; [
+        driversi686Linux.amdvlk
+      ];
+
+      enable32Bit = true;
+    };
+    hardware.enableAllFirmware = true; 
+    system.stateVersion = "24.11";
   };
-  hardware.enableAllFirmware = true; 
-  system.stateVersion = "24.11";
 }
