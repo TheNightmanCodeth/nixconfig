@@ -117,7 +117,7 @@
         rpc-whitelist = "192.168.*.*";
         blocklist-enabled = true;
         blocklist-url = "https://github.com/Naunter/BT_BlockLists/raw/master/bt_blocklists.gz";
-        peer-port = 6095;
+        peer-port = 60965;
         dht-enabled = false;
         pex-enabled = false;
         utp-enabled = false;
