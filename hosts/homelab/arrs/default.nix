@@ -40,6 +40,14 @@
       dataDir = "/mnt/data/Apps/Plex";
     };
 
+    services.jellyfin = {
+      enable = true;
+      user = "streamer";
+      group = "media";
+      openFirewall = true;
+      dataDir = "/mnt/data/Apps/JellyFin";
+    };
+
 #### SONARR : 8989
     services.sonarr = {
       enable = true;
