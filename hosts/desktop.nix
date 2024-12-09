@@ -11,6 +11,9 @@ in {
     '';
     hardware.enableRedistributableFirmware = true;
     nixpkgs.config.allowUnfree = true;
+    # Fix "warning: nix search path entry {} does not exist ...
+    # https://github.com/NixOS/nix/issues/2982#issuecomment-2477618346
+    nix.channel.enable = false;
 
 #### USERS
     users.users.joe = {

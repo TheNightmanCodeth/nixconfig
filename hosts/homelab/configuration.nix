@@ -60,7 +60,6 @@
 #### Time Machine
     services.samba = {
       enable = true;
-      securityType = "user";
       openFirewall = true;
       settings = {
         global = {
@@ -105,6 +104,8 @@
     hardware.graphics = {
       extraPackages = with pkgs; [
         rocmPackages.clr.icd
+        vaapiVdpau
+        libvdpau-va-gl
         amdvlk
       ];
 

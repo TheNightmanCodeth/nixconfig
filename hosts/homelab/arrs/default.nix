@@ -40,6 +40,7 @@
       dataDir = "/mnt/data/Apps/Plex";
     };
 
+#### Jellyfin : 8096
     services.jellyfin = {
       enable = true;
       user = "streamer";

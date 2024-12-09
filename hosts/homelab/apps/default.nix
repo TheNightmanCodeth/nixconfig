@@ -1,6 +1,7 @@
 { config, ... }: {
   imports = [
     ./soft-serve.nix
+    ./nginx.nix
   ];
 
   config.services.softserve = {
