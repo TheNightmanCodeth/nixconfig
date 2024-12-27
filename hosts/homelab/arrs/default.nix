@@ -30,6 +30,12 @@
         prowlarr = {};
       };
     };
+#### Jellyseerr : 5055
+    services.jellyseerr = {
+      enable = true;
+      openFirewall = true;
+      port = 5055;
+    };
 
 #### PLEX : 32400
     services.plex = {

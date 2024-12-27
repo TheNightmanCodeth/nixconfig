@@ -6,7 +6,15 @@
 			recommendedProxySettings = true;
             recommendedTlsSettings = true;
             recommendedGzipSettings = true;
-            recommendedOptimisation = true;
+      recommendedOptimisation = true;
+      virtualHosts."request.jdiggity.me" = {
+        enableACME = true;
+        forceSSL = true;
+        
+        locations."/" = {
+          proxyPass = "http://localhost:5055";
+        };
+      };
 			virtualHosts."jellyfin.jdiggity.me" = {
 				enableACME = true;
 				forceSSL = true;
@@ -21,7 +29,7 @@
 					proxyPass = "http://localhost:8096";
 					extraConfig = 
 						"proxy_buffering off;";
-				};
+                };
 
 				locations."/socket" = {
 					proxyPass = "http://localhost:8096";
