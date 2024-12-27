@@ -4,7 +4,9 @@
 		services.nginx = {
 			enable = true;
 			recommendedProxySettings = true;
-			recommendedTlsSettings = true;
+            recommendedTlsSettings = true;
+            recommendedGzipSettings = true;
+            recommendedOptimisation = true;
 			virtualHosts."jellyfin.jdiggity.me" = {
 				enableACME = true;
 				forceSSL = true;
