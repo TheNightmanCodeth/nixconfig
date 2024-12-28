@@ -23,6 +23,12 @@ in {
       shell = "${pkgs.zsh}/bin/zsh";
       home = "/home/joe";
       homeMode = "755";
+      openssh.authorizedKeys.keys = [
+        # MBP
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDcMdWYLUmP9ySC2jm/3G8pkbk7VaOCJKWtfJ2iTgkt/ joe"
+        # iPhone / iSH
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHfRx14BGVoosZPjusWQmmoVagQANRYq45fxR40XwcKj joe"
+      ];
     };
 
 #### System Packages
@@ -163,11 +169,8 @@ in {
       enable = true;
       ports = [ 22 ];
       settings = {
-        PasswordAuthentication = true;
-        AllowUsers = null; # Allow all users. Can be [ "joe" "urmomma" ]
-        UseDns = true;
-        X11Forwarding = false; # idk what this does but wayland better ?
-        PermitRootLogin = "prohibit-password"; # sudo who
+        PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
       };
     };
 
