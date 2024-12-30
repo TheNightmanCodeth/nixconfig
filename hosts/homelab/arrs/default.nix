@@ -94,7 +94,13 @@
 
 #### FIREWALL
 
-    networking.firewall.allowedTCPPorts = [ 9696 7878 8989 9091 ];
+    networking.firewall.allowedTCPPorts = [ 9696 7878 8989 9091 6789 ];
+
+    services.nzbget = {
+      enable = true;
+      user = "transmission";
+      group = "media";
+    };
     
 #### VPN + Transmission
     vpnNamespaces.wg = {

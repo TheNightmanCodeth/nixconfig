@@ -92,6 +92,25 @@
 
     networking.firewall.allowPing = true;
 
+#### Virt-manager
+    programs.virt-manager.enable = true;
+    users.groups.libvirtd.members = [ "joe" ];
+    virtualisation.libvirtd.enable = true;
+    virtualisation.spiceUSBRedirection.enable = true;
+
+#### RDP
+    services.xrdp.enable = true;
+    services.xrdp.defaultWindowManager = "${pkgs.gnome-session}/bin/gnome-session";
+    services.xrdp.openFirewall = true;
+
+    environment.systemPackages = with pkgs; [ gnome-remote-desktop ]; 
+
+#### Disable auto-suspend
+    systemd.targets.sleep.enable = false;
+    systemd.targets.suspend.enable = false;
+    systemd.targets.hibernate.enable = false;
+    systemd.targets.hybrid-sleep.enable = false;
+
 #### GPU
     services.xserver.videoDrivers = [ "amdgpu" ];
 

@@ -133,8 +133,12 @@ in {
           22 # SSH
           23231 # Soft Serve
           111 2049 4000 4001 4002 20048 # NFS
+          3389 3390 # RDP
+          5900 # VNC
         ];
         allowedUDPPorts = [
+          3389 3390 # RDP
+          5900 # VNC
           111 2049 4000 4001 4002 20048 # NFS
         ];
         allowedTCPPortRanges = [

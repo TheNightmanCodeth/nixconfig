@@ -152,6 +152,11 @@ in {
   dconf = {
     enable = true;
     settings = {
+  #### Virt-manager
+      "org/virt-manager/virt-manager/connections" = {
+        autoconnect = ["qemu:///system"];
+        uris = ["qemu:///system"];
+      };
       "org/gnome/shell" = {
         disable-user-extensions = false;
         ## GNOME EXTENSIONS ##
