@@ -1,5 +1,10 @@
 { config, lib, pkgs, ... }:
-{
+let
+  homelabSystemPackages = with pkgs; [
+    ethtool
+    networkd-dispatcher
+  ];
+in {
   imports = [ ../desktop.nix ./arrs ./apps ];
 
   config = {
@@ -27,6 +32,10 @@
 
       kernelModules = [ "kvm-amd" ];
       extraModulePackages = [ ];
+
+    #### IP Forwarding (Tailscale Exit Node)
+      kernel.sysctl."net.ipv4.ip_forward" = lib.mkForce 1;
+      kernel.sysctl."net.ipv6.conf.all.forwarding" = lib.mkForce 1;
     };
 
     hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
@@ -92,6 +101,21 @@
 
     networking.firewall.allowPing = true;
 
+#### Tailscale (homelab specific)
+    services.tailscale.useRoutingFeatures = "both";
+    # services.tailscale.interfaceName = "enp4s0f0u2";
+
+    services.networkd-dispatcher = {
+      enable = true;
+      rules."50-tailscale" = {
+        onState = ["routable"];
+        script = ''
+          NETDEV=$(ip -o route get 8.8.8.8 | cut -f 5 -d " ")
+          ${pkgs.ethtool} -K $NETDEV rx-udp-gro-forwarding on rx-gro-list off
+        '';
+      };
+    };
+
 #### Virt-manager
     programs.virt-manager.enable = true;
     users.groups.libvirtd.members = [ "joe" ];
@@ -103,7 +127,7 @@
     services.xrdp.defaultWindowManager = "${pkgs.gnome-session}/bin/gnome-session";
     services.xrdp.openFirewall = true;
 
-    environment.systemPackages = with pkgs; [ gnome-remote-desktop ]; 
+    environment.systemPackages = with pkgs; [ gnome-remote-desktop ] ++ homelabSystemPackages; 
 
 #### Disable auto-suspend
     systemd.targets.sleep.enable = false;

@@ -1,4 +1,4 @@
-{ inputs, pkgs, system, ... }:
+{ inputs, pkgs, config, system, ... }:
 let
   berkeley-mono = pkgs.callPackage ../fonts/berkeley-mono.nix { };
 
@@ -39,7 +39,7 @@ in {
       libdrm
       firefox
       chromium
-      #apostrophe
+      tailscale
       distrobox
       boxbuddy
       devenv
@@ -48,6 +48,9 @@ in {
       cntr # Used to connect to failed nix-build via breakpointHook in nativeBuildInputs
       inputs.ghostty.packages.${system}.default
     ];
+
+#### Tailscale
+    services.tailscale.enable = true;
 
 #### DOCKER
     virtualisation.docker.enable = true;
@@ -129,6 +132,9 @@ in {
     #### FIREWALL
       firewall = {
         enable = true;
+
+        trustedInterfaces = [ "tailscale0" ];
+
         allowedTCPPorts = [ 
           22 # SSH
           23231 # Soft Serve
@@ -140,6 +146,7 @@ in {
           3389 3390 # RDP
           5900 # VNC
           111 2049 4000 4001 4002 20048 # NFS
+          config.services.tailscale.port
         ];
         allowedTCPPortRanges = [
           { from = 1714; to = 1764; } # KDE Connect
