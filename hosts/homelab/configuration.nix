@@ -62,9 +62,23 @@ in {
       fsType = "ext4";
     };
 
+  #### NFS - ROMS
+    fileSystems."/export/roms" = {
+      device = "/mnt/data/roms";
+      options = [ "bind" ];
+    };
+
     swapDevices = [
       { device = "/dev/disk/by-label/swap"; }
     ];
+
+#### NFS Config
+    services.nfs.server.enable = true;
+    networking.firewall.allowedTCPPorts = [ 2049 ];
+    # path            ip-addr-or-subnet(opts,...) ...
+    services.nfs.server.exports = ''
+      /export/roms    100.0.0.0/8(rw,nohide,insecure,no_subtree_check)
+    '';
 
 #### Time Machine
     services.samba = {
