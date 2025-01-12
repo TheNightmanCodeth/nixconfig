@@ -38,6 +38,8 @@ in {
       drm_info
       libdrm
       firefox
+      rsync
+      tmux
       chromium
       tailscale
       distrobox
