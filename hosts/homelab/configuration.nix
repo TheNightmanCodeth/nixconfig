@@ -30,6 +30,10 @@ in {
         kernelModules = [ "amdgpu" ];
       };
 
+      kernelPackages = pkgs.linuxPackages_latest;
+
+      crashDump.enable = true;
+
       kernelModules = [ "kvm-amd" ];
       extraModulePackages = [ ];
 
@@ -54,6 +58,11 @@ in {
 
     fileSystems."/mnt/media" = {
       device = "/dev/disk/by-label/MEDIA";
+      fsType = "ext4";
+    };
+
+    fileSystems."/mnt/media2" = {
+      device = "/dev/disk/by-label/media2";
       fsType = "ext4";
     };
 
@@ -105,6 +114,19 @@ in {
           "create mask" = "0644";
           "directory mask" = "0755";
         };
+
+        "VM" = {
+          "valid users" = "@users";
+          "path" = "/mnt/media2/vm";
+          "fruit:aapl" = "yes";
+          "fruit:time machine" = "yes";
+          "vfs objects" = "catia fruit streams_xattr acl_xattr";
+          "browsable" = "yes";
+          "writeable" = "yes";
+          "read only" = "no";
+          "create mask" = "0644";
+          "directory mask" = "0755";
+        };
       };
     };
 
@@ -133,7 +155,13 @@ in {
 #### Virt-manager
     programs.virt-manager.enable = true;
     users.groups.libvirtd.members = [ "joe" ];
-    virtualisation.libvirtd.enable = true;
+    virtualisation.libvirtd = {
+      enable = true;
+      qemu.ovmf.packages = [
+        pkgs.pkgsCross.aarch64-multiplatform.OVMF.fd
+        pkgs.OVMF.fd
+      ];
+    };
     virtualisation.spiceUSBRedirection.enable = true;
 
 #### RDP
