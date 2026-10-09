@@ -1,5 +1,5 @@
 # joe's home-manager config, identical on both machines.
-{ lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 {
   # Ported from the zsh-snap ~/.zshrc and ~/.zprofile.
   programs.zsh = {
@@ -101,10 +101,17 @@
       };
       commit.gpgsign = true;
       gpg.format = "ssh";
+      gpg.ssh.allowedSignersFile = "${config.xdg.configHome}/git/allowed_signers";
       init.defaultBranch = "main";
       pull.rebase = true;
     };
   };
+
+  # Lets git verify SSH-signed commits locally (ithaca, odysseus).
+  xdg.configFile."git/allowed_signers".text = ''
+    joseph.diragi@icloud.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGmW6OuZ1gSgM6ubqbE5ZWVqe/Ay/W3j4XhGnaB9folp
+    joseph.diragi@icloud.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJeBvmFRJHthe3AgBdjUspBcVxEm9ODjErePP0+bFwJ9
+  '';
 
   # First home-manager generation on both machines. Same rule as
   # system.stateVersion: a marker, not something to keep current.
