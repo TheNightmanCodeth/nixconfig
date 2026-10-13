@@ -30,6 +30,38 @@
     '';
   };
 
+  # Nix binary cache on the NAS, read-only here (odysseus is the writer).
+  # nix-darwin has no fileSystems, so this is an autofs direct map: auto_master
+  # gains one line pointing at auto_nixcache. /etc/fstab is left alone — it
+  # holds the installer's /nix volume entry. knownSha256Hashes is the stock
+  # auto_master nix-darwin is allowed to replace; if a macOS update rewrites
+  # it, activation stops and asks for the new hash.
+  environment.etc."auto_master" = {
+    knownSha256Hashes = [
+      "b2aac03248e8f229c703561f5bb059f9be491e5db9f447692398d775a9fb12a5"
+    ];
+    text = ''
+      #
+      # Automounter master map
+      #
+      +auto_master		# Use directory service
+      #/net			-hosts		-nobrowse,hidefromfinder,nosuid
+      /home			auto_home	-nobrowse,hidefromfinder
+      /Network/Servers	-fstab
+      /-			-static
+      /-			auto_nixcache	-nobrowse,nosuid
+    '';
+  };
+  # macOS's client only speaks NFSv4.0. resvport because Linux nfsd rejects
+  # unprivileged source ports by default; soft so an absent NAS (off the
+  # tailnet) errors out instead of hanging nix-daemon.
+  environment.etc."auto_nixcache".text = ''
+    /opt/nix-cache	-fstype=nfs,vers=4,ro,resvport,nolocks,soft,timeo=50	100.109.104.32:/mnt/data/nix-cache
+  '';
+  system.activationScripts.postActivation.text = ''
+    /usr/sbin/automount -c
+  '';
+
   system.configurationRevision = inputs.self.rev or inputs.self.dirtyRev or null;
 
   # Carried over from the original /etc/nix-darwin flake. Read

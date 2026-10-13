@@ -68,6 +68,27 @@
 
   services.tailscale.enable = true;
 
+  # Nix binary cache on the NAS (a btrfs subvolume on its single-disk /mnt/data),
+  # so a weekly GC doesn't mean rebuilding PureDarwin. Reached over Tailscale:
+  # the NAS's LAN side (10.20.30.0/24) isn't routable from 192.168.1.0/24.
+  # Automounted on first access, so boot never waits on the NAS. `soft` makes
+  # an unreachable NAS fail with EIO instead of hanging nix; the narinfo is
+  # written after its NAR, so an interrupted push can't leave a broken entry.
+  fileSystems."/mnt/nix-cache" = {
+    device = "100.109.104.32:/mnt/data/nix-cache";
+    fsType = "nfs";
+    options = [
+      "nfsvers=4.2"
+      "soft"
+      "timeo=50"
+      "noauto"
+      "x-systemd.automount"
+      "x-systemd.idle-timeout=600"
+      "x-systemd.after=tailscaled.service"
+      "_netdev"
+    ];
+  };
+
   environment.systemPackages = [
     pkgs.git # flakes fetch git inputs; without it `nixos-rebuild` on a repo fails
   ];

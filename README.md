@@ -28,10 +28,10 @@ Detected on the running Fedora install:
 flake.nix                     nixpkgs unstable, nix-darwin, home-manager, joevim; comfyui outputs
 flake.lock                    pinned, evaluated, ready to install from
 hosts/odysseus/
-  default.nix                 the system: boot, user, ssh, nfs, zram
+  default.nix                 the system: boot, user, ssh, nfs, nix-cache mount, zram
   hardware-configuration.nix  disks, modules, firmware, microcode
 hosts/ithaca/
-  default.nix                 hostname, key-only Remote Login
+  default.nix                 hostname, key-only Remote Login, NAS nix-cache automount
 modules/
   common.nix                  shared by both hosts: packages, ssh keys, home-manager
   home.nix                    joe's home-manager config: git, zsh + antidote plugins
