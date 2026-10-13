@@ -30,7 +30,7 @@
     '';
   };
 
-  # Nix binary cache on the NAS, read-only here (odysseus is the writer).
+  # Nix binary cache on the NAS. ithaca pushes its aarch64-darwin builds too.
   # nix-darwin has no fileSystems, so this is an autofs direct map: auto_master
   # gains one line pointing at auto_nixcache. /etc/fstab is left alone — it
   # holds the installer's /nix volume entry. knownSha256Hashes is the stock
@@ -54,9 +54,10 @@
   };
   # macOS's client only speaks NFSv4.0. resvport because Linux nfsd rejects
   # unprivileged source ports by default; soft so an absent NAS (off the
-  # tailnet) errors out instead of hanging nix-daemon.
+  # tailnet) errors out instead of hanging nix-daemon. No nolocks: locking is
+  # part of NFSv4 itself, and mount_nfs fails with EINVAL if it's given.
   environment.etc."auto_nixcache".text = ''
-    /opt/nix-cache	-fstype=nfs,vers=4,ro,resvport,nolocks,soft,timeo=50	100.109.104.32:/mnt/data/nix-cache
+    /opt/nix-cache	-fstype=nfs,vers=4,resvport,soft,timeo=50	100.109.104.32:/mnt/data/nix-cache
   '';
   system.activationScripts.postActivation.text = ''
     /usr/sbin/automount -c
