@@ -63,6 +63,8 @@
     /usr/sbin/automount -c
   '';
 
+  lanNixCache.path = "/opt/nix-cache";
+
   system.configurationRevision = inputs.self.rev or inputs.self.dirtyRev or null;
 
   # Carried over from the original /etc/nix-darwin flake. Read

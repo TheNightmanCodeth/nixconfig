@@ -8,7 +8,10 @@
   ...
 }:
 {
-  imports = [ ./nix.nix ];
+  imports = [
+    ./nix.nix
+    ./nix-cache.nix
+  ];
 
   nixpkgs.config.allowUnfreePredicate =
     pkg:
@@ -16,13 +19,18 @@
       "claude-code"
     ];
 
-  environment.systemPackages = [
-    inputs.joevim.packages.${pkgs.stdenv.hostPlatform.system}.default
-    pkgs.claude-code
-    pkgs.codex
-  ];
+  environment = {
+    systemPackages = [
+      inputs.joevim.packages.${pkgs.stdenv.hostPlatform.system}.default
+      pkgs.claude-code
+      pkgs.codex
+    ];
 
-  environment.variables.EDITOR = "nvim";
+    variables.EDITOR = "nvim";
+
+    # Completions shipped by system packages, for home-manager's compinit.
+    pathsToLink = [ "/share/zsh" ];
+  };
 
   # Carried over from the Fedora install's ~/.ssh/authorized_keys. The first is
   # ithaca's ~/.ssh/id_ed25519.pub, the only public key on that machine.
@@ -44,8 +52,6 @@
     enableCompletion = false;
   };
   users.users.joe.shell = pkgs.zsh;
-  # Completions shipped by system packages, for home-manager's compinit.
-  environment.pathsToLink = [ "/share/zsh" ];
 
   home-manager = {
     useGlobalPkgs = true;

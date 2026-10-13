@@ -88,6 +88,7 @@
       "_netdev"
     ];
   };
+  lanNixCache.path = "/mnt/nix-cache";
 
   environment.systemPackages = [
     pkgs.git # flakes fetch git inputs; without it `nixos-rebuild` on a repo fails
