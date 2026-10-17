@@ -62,6 +62,7 @@
         "ael-code/zsh-colored-man-pages"
         "momo-lab/zsh-abbrev-alias"
         "fdellwing/zsh-bat"
+        "z-shell/zsh-eza"
         "sindresorhus/pure kind:fpath"
         "Aloxaf/fzf-tab kind:defer"
         "zsh-users/zsh-autosuggestions kind:defer"
@@ -97,10 +98,11 @@
     '';
   };
 
-  # Runtime dependencies of fzf-tab and zsh-bat.
+  # Runtime dependencies of fzf-tab, zsh-bat and zsh-eza.
   home.packages = [
     pkgs.fzf
     pkgs.bat
+    pkgs.eza
   ];
 
   programs.git = {
