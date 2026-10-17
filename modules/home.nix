@@ -71,9 +71,21 @@
     };
 
     initContent = ''
-      # Map UP and DOWN to natively cycle past commands matching what is typed so far
-      bindkey '^[[A' history-beginning-search-backward
-      bindkey '^[[B' history-beginning-search-forward
+      # Map UP and DOWN to natively cycle past commands matching what is typed so far.
+      # The *-line-or-beginning-search variants leave the cursor at end of line.
+      autoload -Uz up-line-or-beginning-search down-line-or-beginning-search
+      zle -N up-line-or-beginning-search
+      zle -N down-line-or-beginning-search
+      bindkey '^[[A' up-line-or-beginning-search
+      bindkey '^[[B' down-line-or-beginning-search
+
+      # Home/End/Delete. macOS's stock /etc/zshrc bound these from terminfo, but
+      # nix-darwin replaces that file. Ghostty maps cmd+left/right to Home/End.
+      bindkey '^[OH' beginning-of-line
+      bindkey '^[OF' end-of-line
+      bindkey '^[[H' beginning-of-line
+      bindkey '^[[F' end-of-line
+      bindkey '^[[3~' delete-char
 
       autoload -Uz promptinit && promptinit && prompt pure
 
