@@ -54,10 +54,18 @@
   };
   # macOS's client only speaks NFSv4.0. resvport because Linux nfsd rejects
   # unprivileged source ports by default; soft so an absent NAS (off the
-  # tailnet) errors out instead of hanging nix-daemon. No nolocks: locking is
-  # part of NFSv4 itself, and mount_nfs fails with EINVAL if it's given.
+  # LAN) errors out instead of hanging nix-daemon. deadtimeout=0 so the
+  # kernel never force-unmounts ("squishes") it while the NAS is briefly
+  # unreachable, e.g. across sleep or a reboot; it recovers instead. No
+  # nolocks: locking is part of NFSv4 itself, and mount_nfs fails with
+  # EINVAL if it's given.
+  #
+  # LAN address, not homelab-mm's tailnet one (100.109.104.32): the tailnet
+  # route depends on Tailscale being up, which it isn't right after wake or
+  # boot, and that's what kept killing the mount. Off the LAN the cache is
+  # simply unavailable and nix falls back to cache.nixos.org.
   environment.etc."auto_nixcache".text = ''
-    /opt/nix-cache	-fstype=nfs,vers=4,resvport,soft,timeo=50	100.109.104.32:/mnt/data/nix-cache
+    /opt/nix-cache	-fstype=nfs,vers=4,resvport,soft,timeo=50,deadtimeout=0	10.20.30.210:/mnt/data/nix-cache
   '';
   system.activationScripts.postActivation.text = ''
     /usr/sbin/automount -c
