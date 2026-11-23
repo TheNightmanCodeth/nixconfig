@@ -93,11 +93,11 @@
         "rustowl-flake": "rustowl-flake"
       },
       "locked": {
-        "lastModified": 1795453521,
-        "narHash": "sha256-I0m4nZhUvyL1E+uxuffqu5kQLa7LGAGHEnMiJu29KQw=",
+        "lastModified": 1795458661,
+        "narHash": "sha256-CT4YY7VyWuCEOvs4CEcrx2ZDGaV3U6T6lL4hE1QjmCY=",
         "owner": "TheNightmanCodeth",
         "repo": "joevim",
-        "rev": "ec3e05cd9ef271d194b7816c98c69edf0fdb9d3e",
+        "rev": "3ae85b8cef5028c34ace5572f8e7178930304ce8",
         "type": "github"
       },
       "original": {
