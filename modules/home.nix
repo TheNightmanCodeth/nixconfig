@@ -118,6 +118,7 @@
       gpg.ssh.allowedSignersFile = "${config.xdg.configHome}/git/allowed_signers";
       init.defaultBranch = "main";
       pull.rebase = true;
+      rerere.enabled = true;
     };
   };
 
